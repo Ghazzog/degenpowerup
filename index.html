@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Power Up Website</title>
+    <style>
+        /* Basic styles for the image, button, and message */
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            height: 100vh;
+            margin: 0;
+            background-color: #f4f4f9;
+        }
+        img {
+            max-width: 80%;
+            max-height: 70vh;
+            border: 2px solid #333;
+            margin-bottom: 20px;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        #message {
+            font-size: 20px;
+            margin-top: 10px;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <!-- Image -->
+    <img id="mainImage" src="https://i.pinimg.com/736x/0c/f6/6c/0cf66c781c57b388322dc8c3aa7e1174.jpg" alt="Initial Image">
+
+    <!-- Button -->
+    <button onclick="powerUp()">POWER UP</button>
+
+    <!-- Message -->
+    <div id="message"></div>
+
+    <!-- Audio element -->
+    <audio id="powerUpSound" src="your-audio-file.mp3" preload="auto"></audio>
+
+    <script>
+        // Array of image URLs and messages
+        const images = [
+            {
+                url: "https://i.pinimg.com/564x/b8/f6/d4/b8f6d4ce77b57a92c2036af2f10b0501.jpg",
+                message: "You are a protector now"
+            },
+            {
+                url: "https://i.pinimg.com/564x/b1/0e/bf/b10ebfe3fd64725e1f5515011da5785d.jpg",
+                message: "You are a defender now"
+            },
+            {
+                url: "https://i.pinimg.com/736x/d1/c7/5c/d1c75c2102ab7f4cf2108810e877f6eb.jpg",
+                message: "You are a wizard now"
+            },
+            {
+                url: "https://i.pinimg.com/564x/36/9a/d1/369ad1b2af3fed1801d94b8b04d52cd1.jpg",
+                message: "You are an animal now"
+            }
+        ];
+
+        // Function to change the image, play sound, and display message
+        function powerUp() {
+    // Randomly select an image and message
+    const selected = images[Math.floor(Math.random() * images.length)];
+    
+    // Update the image source
+    document.getElementById("mainImage").src = selected.url;
+    
+    // Display the message
+    document.getElementById("message").textContent = selected.message;
+    
+    // Play audio
+    const audio = document.getElementById("powerUpSound");
+    audio.play();
+    
+    // Hide the button
+    document.querySelector("button").style.display = "none";
+}
+    </script>
+</body>
+</html>
