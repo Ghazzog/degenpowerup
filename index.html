@@ -3,18 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Uncial+Antiqua&display=swap" rel="stylesheet">
     <title>Power Up Website</title>
     <style>
         /* Basic styles for the image, button, and message */
         body {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            flex-direction: column;
-            height: 100vh;
-            margin: 0;
-            background-color: #f4f4f9;
-        }
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    font-family: 'Uncial Antiqua', serif;
+    height: 100vh;
+    margin: 0;
+    background-image: url('images/degen_site_banner.jpg'); /* Replace with your wallpaper path */
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
         img {
             max-width: 80%;
             max-height: 70vh;
@@ -37,8 +42,15 @@
         #message {
             font-size: 20px;
             margin-top: 10px;
-            color: #333;
+            color: #f87676;
         }
+
+        #countdown {
+    font-size: 24px;
+    color: #ff3333;
+    margin-top: 20px;
+    font-weight: bold;
+}
     </style>
 </head>
 <body>
@@ -47,6 +59,8 @@
 
     <!-- Button -->
     <button onclick="powerUp()">POWER UP</button>
+
+    <div id="countdown"></div>
 
     <!-- Message -->
     <div id="message"></div>
@@ -67,32 +81,86 @@
             },
             {
                 url: "images/wizard.jpeg",
-                message: "You are a wizard now" + " +4 to INT -2 to DEX -2 to STR"
+                message: "You are a wizard now" + " +4 to INT -2 to STR"
             },
             {
-                url: "https://i.pinimg.com/564x/36/9a/d1/369ad1b2af3fed1801d94b8b04d52cd1.jpg",
-                message: "You are a warrior now" + " +4 to STR -4 to INT"
+                url: "images/ninja.jpeg",
+                message: "You are a ninja now" + " +2 to DEX +2 to INT"
             }
         ];
 
         // Function to change the image, play sound, and display message
-        function powerUp() {
+     // Check local storage on page load
+     window.onload = () => {
+    const countdownStart = localStorage.getItem("countdownStart");
+    const buttonClicked = localStorage.getItem("buttonClicked");
+
+    if (countdownStart && buttonClicked === "true") {
+        const elapsed = Math.floor((Date.now() - countdownStart) / 1000);
+        const remainingTime = 2 * 60 * 60 - elapsed; // 2 hours in seconds
+        if (remainingTime > 0) {
+            document.querySelector("button").style.display = "none"; // Hide button
+            startCountdown(remainingTime);
+
+            // Load the image and message from local storage
+            document.getElementById("mainImage").src = localStorage.getItem("selectedImage");
+            document.getElementById("message").textContent = localStorage.getItem("selectedMessage");
+        } else {
+            document.getElementById("countdown").textContent = "PHASE 2 has started!";
+        }
+    }
+};
+
+function powerUp() {
     // Randomly select an image and message
     const selected = images[Math.floor(Math.random() * images.length)];
     
-    // Update the image source
+    // Update the image source and display the selected message
     document.getElementById("mainImage").src = selected.url;
-    
-    // Display the message
     document.getElementById("message").textContent = selected.message;
+    
+    // Save the selected message and image URL to local storage
+    localStorage.setItem("selectedMessage", selected.message);
+    localStorage.setItem("selectedImage", selected.url);
     
     // Play audio
     const audio = document.getElementById("powerUpSound");
     audio.play();
     
-    // Hide the button
+    // Hide the button and save state to local storage
     document.querySelector("button").style.display = "none";
+    localStorage.setItem("countdownStart", Date.now());
+    localStorage.setItem("buttonClicked", "true");
+
+    // Start the countdown
+    startCountdown(2 * 60 * 60); // 2 hours in seconds
 }
+
+function startCountdown(duration) {
+    const countdownDisplay = document.getElementById("countdown");
+    let timer = duration, hours, minutes, seconds;
+
+    const interval = setInterval(() => {
+        // Update hours, minutes, seconds
+        hours = Math.floor(timer / 3600);
+        minutes = Math.floor((timer % 3600) / 60);
+        seconds = timer % 60;
+
+        countdownDisplay.textContent = `PHASE 2 soon - ${hours}h ${minutes}m ${seconds}s`;
+
+        // Check if countdown is complete
+        if (--timer < 0) {
+            clearInterval(interval);
+            countdownDisplay.textContent = "PHASE 2 has started!";
+            localStorage.removeItem("countdownStart");
+            localStorage.removeItem("buttonClicked");
+            localStorage.removeItem("selectedMessage");
+            localStorage.removeItem("selectedImage");
+        }
+    }, 1000);
+}
+
+
     </script>
 </body>
 </html>
