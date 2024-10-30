@@ -128,7 +128,7 @@
 
     if (countdownStart && buttonClicked === "true") {
         const elapsed = Math.floor((Date.now() - countdownStart) / 1000);
-        const remainingTime = 2 * 60 * 60 - elapsed; // 2 hours in seconds
+        const remainingTime = 1 * 60 * 60 - elapsed; // 2 hours in seconds
         if (remainingTime > 0) {
             document.querySelector("button").style.display = "none"; // Hide button
             startCountdown(remainingTime);
